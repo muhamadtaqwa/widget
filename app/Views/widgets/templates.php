@@ -38,7 +38,7 @@ if (!empty($_GET['data'])) {
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: transparent;
             color: var(--text-main);
             overflow: hidden;

@@ -1,5 +1,5 @@
 /* ============================================================
-   PNP-Journal — Navy + Gold Theme (Light Mode)
+   I-Widget — Tosca + White Theme (Light Mode, Modern)
    ============================================================ */
 
 .hidden {
@@ -7,7 +7,7 @@
 }
 
 :root {
-  /* ===== Warna Utama (Navy) ===== */
+  /* ===== Warna Utama (Tosca) ===== */
   --primary: #0d9488;
   --primary-light: #2dd4bf;
   --primary-hover: #0f766e;
@@ -36,7 +36,6 @@
   --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.1);
   --shadow-xl: 0 20px 50px -12px rgba(15, 23, 42, 0.15);
   --shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.25);
-  --glow: 0 0 20px rgba(212, 175, 55, 0.2);
 
   /* ===== Teks ===== */
   --text-main: #0f172a;
@@ -56,8 +55,8 @@
   --radius: 16px;
   --radius-sm: 10px;
   --radius-lg: 20px;
-  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  --nav-h: 64px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --nav-h: 68px;
 }
 
 * {
@@ -66,16 +65,29 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--bg-dark);
   color: var(--text-main);
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: "Poppins", sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
   line-height: 1.6;
 }
 
-/* Background subtle gradient untuk kesan premium */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* ===== Background Gradient ===== */
 .glow-bg {
   position: fixed;
   top: 0;
@@ -86,13 +98,13 @@ body {
   background:
     radial-gradient(
       circle at 10% 20%,
-      rgba(13, 148, 136, 0.06) 0%,
-      transparent 40%
+      rgba(13, 148, 136, 0.08) 0%,
+      transparent 45%
     ),
     radial-gradient(
       circle at 90% 80%,
-      rgba(212, 175, 55, 0.05) 0%,
-      transparent 40%
+      rgba(45, 212, 191, 0.06) 0%,
+      transparent 45%
     );
 }
 
@@ -144,7 +156,11 @@ header {
 
 .lang-link.active {
   color: var(--text-inverse);
-  background: var(--primary);
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--primary-light) 100%
+  );
   box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
 }
 
@@ -159,7 +175,6 @@ header {
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 0.5rem;
-  position: relative;
 }
 
 .logo-img {
@@ -172,7 +187,6 @@ header {
 
 .logo-img:hover {
   transform: scale(1.05);
-  filter: drop-shadow(0 6px 20px rgba(212, 175, 55, 0.3));
 }
 
 .subtitle {
@@ -183,7 +197,7 @@ header {
   max-width: 700px;
 }
 
-/* ===== Main Content Layout ===== */
+/* ===== Main Content ===== */
 .main-content {
   max-width: 900px;
   margin: 0 auto;
@@ -215,11 +229,9 @@ header {
   }
 }
 
-/* ===== Card (Light mode: putih bersih + shadow halus) ===== */
+/* ===== Card ===== */
 .glass-card {
   background: var(--card-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   padding: 2.5rem;
@@ -236,7 +248,12 @@ header {
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--primary-light),
+    transparent
+  );
   opacity: 0;
   transition: var(--transition);
 }
@@ -270,7 +287,6 @@ header {
   color: var(--primary);
   width: 24px;
   height: 24px;
-  filter: drop-shadow(0 2px 4px rgba(13, 148, 136, 0.2));
 }
 
 .header-title h2 {
@@ -317,7 +333,7 @@ header {
   padding: 1rem 1.25rem;
   color: var(--text-main);
   font-size: 1rem;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: "Poppins", sans-serif;
   transition: var(--transition);
 }
 
@@ -424,18 +440,6 @@ header {
 }
 
 /* ===== Buttons ===== */
-.btn-sm {
-  padding: 0.6rem 1.2rem;
-  font-size: 0.85rem;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 .btn {
   width: 100%;
   padding: 1.25rem;
@@ -449,14 +453,14 @@ header {
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .btn-primary {
   background: linear-gradient(
     135deg,
     var(--primary) 0%,
-    var(--primary-hover) 100%
+    var(--primary-light) 100%
   );
   color: var(--text-inverse);
   box-shadow: 0 10px 24px -6px rgba(13, 148, 136, 0.35);
@@ -472,7 +476,6 @@ header {
   transform: translateY(0);
 }
 
-/* Tombol gold untuk aksi premium */
 .btn-gold {
   background: linear-gradient(
     135deg,
@@ -486,6 +489,11 @@ header {
 .btn-gold:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 28px rgba(212, 175, 55, 0.4);
+}
+
+.btn i {
+  width: 20px;
+  height: 20px;
 }
 
 /* ===== Chart Selector ===== */
@@ -564,15 +572,10 @@ header {
   max-width: 52px;
   object-fit: contain;
   border-radius: 4px;
-  background: rgb(255, 255, 255);
+  background: #ffffff;
   padding: 2px 4px;
   transition: var(--transition);
   border: 1px solid var(--glass-border);
-}
-
-.type-option input:checked + .type-info .logo-chip-img {
-  background: rgb(255, 255, 255);
-  border-color: var(--primary-light);
 }
 
 /* ===== Card Footer ===== */
@@ -635,6 +638,7 @@ header {
   align-items: center;
   min-height: 500px;
   margin-bottom: 2rem;
+  padding: 1rem;
 }
 
 .copy-btn {
@@ -650,7 +654,7 @@ header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .copy-btn:hover {
@@ -658,10 +662,6 @@ header {
   border-color: var(--primary);
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
-}
-
-.copy-btn:active {
-  transform: translateY(0);
 }
 
 .copy-btn.success {
@@ -683,7 +683,6 @@ header {
   margin-top: 1.5rem;
   overflow: hidden;
   position: relative;
-  box-shadow: inset 0 2px 8px rgba(15, 23, 42, 0.04);
 }
 
 .code-lang {
@@ -704,19 +703,6 @@ header {
   padding: 1.5rem;
   max-height: 250px;
   overflow-y: auto;
-}
-
-.code-wrapper::-webkit-scrollbar {
-  width: 8px;
-}
-
-.code-wrapper::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.03);
-}
-
-.code-wrapper::-webkit-scrollbar-thumb {
-  background: var(--glass-border-strong);
-  border-radius: 4px;
 }
 
 .code-wrapper pre {
@@ -778,7 +764,6 @@ header {
 #widgetPreview {
   width: 100%;
   max-width: 600px;
-  filter: drop-shadow(0 10px 30px rgba(15, 23, 42, 0.1));
 }
 
 /* ===== Media Queries ===== */
@@ -789,23 +774,15 @@ header {
   .header-top {
     margin-bottom: 1.5rem;
   }
-  .logo-wrapper {
-    margin-bottom: 0;
-  }
-  .logo-img {
-    height: 40px;
-  }
   .subtitle {
     font-size: 1rem;
   }
   .glass-card {
     padding: 1.5rem;
   }
-
   .type-option {
     flex: 1 1 100%;
   }
-
   .type-info {
     flex-direction: row;
     padding: 1rem 1.5rem;
@@ -813,45 +790,23 @@ header {
     justify-content: flex-start;
     gap: 1.25rem;
   }
-
   .type-info i {
     width: 24px;
     height: 24px;
   }
-
   .logo-preview-chips {
     justify-content: flex-start;
   }
-
-  #preview .card-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.25rem;
-    padding-bottom: 2rem;
-  }
-
-  #preview .card-header > div:last-child {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
   .chart-selector-group {
     flex-direction: column;
   }
-
   .preview-workspace {
     min-height: 350px;
     padding: 1rem;
   }
-
   .header-title h2 {
     font-size: 1.25rem;
   }
-
   .scimago-data-section {
     padding: 1rem;
   }
@@ -901,10 +856,6 @@ footer p {
   margin-top: 0.25rem;
 }
 
-.full-width.scimago-data-section {
-  margin-top: 0;
-}
-
 .scimago-section-header {
   display: flex;
   align-items: center;
@@ -942,7 +893,7 @@ footer p {
   font-weight: 700;
   cursor: pointer;
   transition: var(--transition);
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .add-row-btn:hover {
@@ -962,7 +913,6 @@ footer p {
   align-items: center;
   gap: 0.6rem;
   margin-bottom: 0.6rem;
-  animation: fadeRowIn 0.2s ease-out;
 }
 
 @media (max-width: 640px) {
@@ -975,45 +925,18 @@ footer p {
     border: 1px solid var(--glass-border);
     gap: 0.75rem;
   }
-
   .data-row input,
-  .data-row select,
-  .data-row input[type="number"] {
-    flex: 1 1 auto !important;
+  .data-row select {
     width: 100% !important;
     max-width: none !important;
   }
-
   .remove-row-btn {
-    align-self: flex-end;
     width: 100%;
     height: 40px;
   }
-
-  .scimago-data-section {
-    padding: 1rem;
-  }
-
-  .scimago-section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-  }
-
   .add-row-btn {
     width: 100%;
     justify-content: center;
-  }
-}
-
-@keyframes fadeRowIn {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -1026,7 +949,7 @@ footer p {
   padding: 0.65rem 0.9rem;
   color: var(--text-main);
   font-size: 0.875rem;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: "Poppins", sans-serif;
   transition: var(--transition);
   min-width: 0;
 }
@@ -1036,21 +959,6 @@ footer p {
   outline: none;
   border-color: var(--primary-light);
   box-shadow: 0 0 0 3px var(--primary-soft);
-  background: var(--input-bg);
-}
-
-.data-row select {
-  flex: 0 0 80px;
-  cursor: pointer;
-}
-
-.data-row select option {
-  background: var(--card-bg);
-  color: var(--text-main);
-}
-
-.data-row input[type="number"] {
-  flex: 0 0 100px;
 }
 
 .remove-row-btn {
@@ -1066,47 +974,17 @@ footer p {
   border-radius: 8px;
   cursor: pointer;
   transition: var(--transition);
-  font-family: "Plus Jakarta Sans", sans-serif;
   padding: 0;
 }
 
 .remove-row-btn:hover {
   background: rgba(239, 68, 68, 0.15);
   border-color: var(--danger);
-  transform: scale(1.08);
 }
 
 .remove-row-btn i {
   width: 14px;
   height: 14px;
-}
-
-/* ===== Scimago ID Group ===== */
-#scimagoIdGroup label {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  margin-bottom: 0.75rem;
-}
-
-#scimagoIdGroup input {
-  width: 100%;
-  background: var(--input-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  color: var(--text-main);
-  font-size: 1rem;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  transition: var(--transition);
-}
-
-#scimagoIdGroup input:focus {
-  outline: none;
-  border-color: var(--primary-light);
-  box-shadow: 0 0 0 4px var(--primary-soft);
-  background: var(--input-bg);
 }
 
 /* ===== Modal ===== */
@@ -1124,7 +1002,6 @@ footer p {
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  transition: var(--transition);
 }
 
 .modal-content {
@@ -1134,8 +1011,8 @@ footer p {
   border: 1px solid var(--glass-border);
   border-radius: 24px;
   position: relative;
-  padding: 2rem !important;
-  animation: modalSlideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  padding: 2rem;
+  animation: modalSlideUp 0.5s cubic-bezier(0.23, 1, 0.32, 1);
   box-shadow: var(--shadow-xl);
 }
 
@@ -1165,7 +1042,6 @@ footer p {
   justify-content: center;
   cursor: pointer;
   transition: var(--transition);
-  z-index: 10;
 }
 
 .modal-close:hover {
@@ -1183,7 +1059,6 @@ footer p {
   width: 48px;
   height: 48px;
   color: var(--accent);
-  filter: drop-shadow(0 4px 12px rgba(212, 175, 55, 0.4));
   margin-bottom: 0.75rem;
 }
 
@@ -1254,14 +1129,12 @@ footer p {
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
-  color: var(--text-main);
 }
 
 .price {
   font-size: 1.5rem;
   font-weight: 800;
   margin-bottom: 1.25rem;
-  color: var(--text-main);
 }
 
 .price span {
@@ -1281,7 +1154,6 @@ footer p {
   gap: 0.75rem;
   margin-bottom: 0.75rem;
   font-size: 0.85rem;
-  color: var(--text-main);
 }
 
 .plan-features i {
@@ -1312,48 +1184,7 @@ footer p {
 }
 
 @media (max-width: 768px) {
-  .modal-overlay {
-    padding: 1.5rem 1rem;
-    align-items: flex-start;
-    overflow-y: auto;
-  }
-  .modal-content {
-    padding: 1.5rem !important;
-    border-radius: 20px;
-    max-height: none;
-    margin: auto 0;
-  }
-  .modal-header {
-    margin-bottom: 1.25rem;
-  }
-  .modal-header h2 {
-    font-size: 1.35rem;
-  }
-  .modal-header p {
-    font-size: 0.85rem;
-  }
   .comparison-grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  .plan-card {
-    padding: 1.25rem;
-  }
-  .price {
-    margin-bottom: 1rem;
-    font-size: 1.35rem;
-  }
-  .plan-features {
-    margin-bottom: 1rem;
-  }
-  .plan-features li {
-    margin-bottom: 0.5rem;
-  }
-}
-
-@media (max-height: 700px) {
-  .modal-content {
-    max-height: 95vh;
-    overflow-y: auto;
   }
 }

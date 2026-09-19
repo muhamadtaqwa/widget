@@ -69,7 +69,7 @@ function qClass($q) {
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: transparent;
             color: var(--text-main);
             overflow-x: hidden;
@@ -131,7 +131,7 @@ function qClass($q) {
             transition: all 0.2s;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
         .tab-btn.active {
             background: white;
