@@ -67,16 +67,17 @@ $currentStyle = $val('table_style', 'text');
     <meta property="og:description" content="<?= htmlspecialchars($currentSeo['desc']) ?>">
     <meta property="og:image" content="<?= base_url('media/img/thumbnail.webp') ?>">
 
-    <link rel="icon" type="image/svg+xml" href="<?= base_url('favicon.svg') ?>">
-    <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('media/img/favicon/apple-touch-icon.png') ?>">
-    <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('media/img/favicon/favicon-32x32.png') ?>">
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('media/img/favicon/favicon-16x16.png') ?>">
-    <link rel="manifest" href="<?= base_url('media/img/favicon/site.webmanifest') ?>">
+    <link rel="icon" type="image/svg+xml" href="<?= base_url('favicon.svg?v=2') ?>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('media/img/favicon/apple-touch-icon.png?v=2') ?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('media/img/favicon/favicon-32x32.png?v=2') ?>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('media/img/favicon/favicon-16x16.png?v=2') ?>">
+    <link rel="manifest" href="<?= base_url('media/img/favicon/site.webmanifest?v=2') ?>">
+    <link rel="shortcut icon" href="<?= base_url('favicon.ico?v=2') ?>">
 
-    <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/style.css?v=4') ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         window.APP_LANG = "<?php echo $lang; ?>";
@@ -89,26 +90,36 @@ $currentStyle = $val('table_style', 'text');
     <?= $this->include('layouts/navbar') ?>
 
     <div class="container">
-        <header>
-            <div class="header-top">
-                <div class="logo-wrapper">
-                    <i data-lucide="blocks" style="width: 48px; height: 48px; color: var(--primary);"></i>
-                    <span style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-left: 0.5rem;">I-Widget</span>
+        <header class="hero-section">
+            <div class="hero-pill-wrapper">
+                <div class="hero-pill">
+                    <i data-lucide="sparkles"></i>
+                    <span>OJS Widget Generator</span>
                 </div>
-                <div style="display: flex; gap: 15px; align-items: center;">
-                    <button id="premiumTrigger" class="btn-premium-trigger">
-                        <i data-lucide="crown"></i> Premium
-                    </button>
-                </div>
+                <button id="premiumTrigger" class="btn-premium-trigger" type="button">
+                    <i data-lucide="crown"></i>
+                    <span>Upgrade Premium</span>
+                </button>
             </div>
-            <p class="subtitle" data-i18n="subtitle">Premium Journal Widget Implementation & Generator</p>
+            <h1 class="hero-title">
+                Widget Jurnal OJS <span class="hero-title-gradient">Modern &amp; Interaktif</span>
+            </h1>
+            <p class="hero-subtitle" data-i18n="subtitle">Implementasi &amp; Generator Widget Jurnal Premium untuk Open Journal Systems</p>
+            <div class="hero-features">
+                <span class="feature-chip"><i data-lucide="smartphone"></i> Responsif Mobile &amp; Desktop</span>
+                <span class="feature-chip"><i data-lucide="refresh-cw"></i> Sinkronisasi Sinta &amp; OpenAlex</span>
+                <span class="feature-chip"><i data-lucide="code-2"></i> 1-Click Embed Iframe</span>
+                <span class="feature-chip"><i data-lucide="shield-check"></i> Bebas Emoji &amp; Profesional</span>
+            </div>
         </header>
 
         <main class="main-content">
             <section class="glass-card" id="konfigurasi">
                 <div class="card-header">
                     <div class="header-title">
-                        <i data-lucide="settings-2"></i>
+                        <div class="header-icon-box">
+                            <i data-lucide="settings-2"></i>
+                        </div>
                         <h2 data-i18n="configTitle">Journal Configuration</h2>
                     </div>
                 </div>
@@ -383,11 +394,11 @@ $currentStyle = $val('table_style', 'text');
                     </div>
                 </div>
 
-                <div class="card-footer" style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <button class="btn btn-primary" id="generateBtn" style="flex: 1; min-width: 200px;">
+                <div class="card-footer">
+                    <button class="btn btn-primary" id="generateBtn" style="flex: 1; min-width: 200px;" type="button">
                         <i data-lucide="refresh-cw"></i> <span data-i18n="btnUpdate">Update</span>
                     </button>
-                    <button class="btn btn-gold" id="saveBtn" style="flex: 1; min-width: 200px;">
+                    <button class="btn btn-secondary" id="saveBtn" style="flex: 1; min-width: 200px;" type="button">
                         <i data-lucide="save"></i> <span><?= $w ? 'Update Widget' : 'Simpan Widget' ?></span>
                     </button>
                 </div>
@@ -396,11 +407,21 @@ $currentStyle = $val('table_style', 'text');
             <section class="glass-card" id="preview">
                 <div class="card-header">
                     <div class="header-title">
-                        <i data-lucide="eye"></i>
+                        <div class="header-icon-box">
+                            <i data-lucide="eye"></i>
+                        </div>
                         <h2 data-i18n="previewTitle">Live Preview</h2>
                     </div>
                     <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                        <button class="copy-btn" id="fullPreviewBtn">
+                        <div class="sidebar-sim-toggle" role="group" aria-label="Simulasi Tampilan Widget">
+                            <button type="button" class="sim-btn active" id="simSidebarBtn" title="Simulasi Tampilan Sidebar OJS (~280px)">
+                                <i data-lucide="columns-2"></i> <span>Sidebar OJS</span>
+                            </button>
+                            <button type="button" class="sim-btn" id="simFullBtn" title="Tampilan Lebar Bebas / Penuh">
+                                <i data-lucide="maximize-2"></i> <span>Lebar Penuh</span>
+                            </button>
+                        </div>
+                        <button class="copy-btn" id="fullPreviewBtn" type="button">
                             <i data-lucide="external-link"></i> <span data-i18n="btnFullPreview">Full Preview</span>
                         </button>
                         <div class="badge-status">
@@ -422,16 +443,21 @@ $currentStyle = $val('table_style', 'text');
             <section class="glass-card" id="embed">
                 <div class="card-header">
                     <div class="header-title">
-                        <i data-lucide="code-2"></i>
+                        <div class="header-icon-box">
+                            <i data-lucide="code-2"></i>
+                        </div>
                         <h2 data-i18n="embedTitle">Embed Code</h2>
                     </div>
-                    <button class="copy-btn" id="copyBtn">
+                    <button class="copy-btn" id="copyBtn" type="button">
                         <i data-lucide="copy"></i> <span data-i18n="btnCopy">Copy Code</span>
                     </button>
                 </div>
 
                 <div class="code-container">
-                    <div class="code-lang">HTML IFRAME</div>
+                    <div class="code-lang">
+                        <span>HTML IFRAME</span>
+                        <span style="font-size: 0.7rem; opacity: 0.8;">OJS Custom Block</span>
+                    </div>
                     <div class="code-wrapper">
                         <pre id="codeSnippet"><code></code></pre>
                     </div>
@@ -450,12 +476,14 @@ $currentStyle = $val('table_style', 'text');
 
     <div id="premiumModal" class="modal-overlay hidden">
         <div class="modal-content">
-            <button class="modal-close" id="closeModal">
+            <button class="modal-close" id="closeModal" type="button" aria-label="Close modal">
                 <i data-lucide="x"></i>
             </button>
 
             <div class="modal-header">
-                <i data-lucide="zap" class="premium-icon"></i>
+                <div class="premium-icon-box">
+                    <i data-lucide="crown"></i>
+                </div>
                 <h2 data-i18n="modalTitle">Upgrade to Premium</h2>
                 <p data-i18n="modalSubtitle">Unlock advanced features and professional branding.</p>
             </div>
@@ -465,43 +493,46 @@ $currentStyle = $val('table_style', 'text');
                     <div class="plan-header">
                         <h3 data-i18n="freePlan">Free</h3>
                         <div class="price">IDR 0<span data-i18n="perLifetime">/lifetime</span></div>
+                        <div class="plan-sub">&nbsp;</div>
                     </div>
                     <ul class="plan-features">
-                        <li><i data-lucide="check" class="check"></i> <span>Unlimited Widget Generation</span></li>
-                        <li><i data-lucide="check" class="check"></i> <span>Statistics Table (Basic)</span></li>
-                        <li><i data-lucide="check" class="check"></i> <span>Manual Data Updates</span></li>
-                        <li><i data-lucide="x" class="cross"></i> <span>No Advanced Charts</span></li>
-                        <li><i data-lucide="x" class="cross"></i> <span>"Powered by" Branding</span></li>
+                        <li><i data-lucide="check" class="check"></i> <span data-i18n="featFree1">Unlimited Widget Generation</span></li>
+                        <li><i data-lucide="check" class="check"></i> <span data-i18n="featFree2">Statistics Table (Basic)</span></li>
+                        <li><i data-lucide="check" class="check"></i> <span data-i18n="featFree3">Manual Data Updates</span></li>
+                        <li><i data-lucide="x" class="cross"></i> <span data-i18n="featFree4">No Advanced Charts</span></li>
+                        <li><i data-lucide="x" class="cross"></i> <span data-i18n="featFree5">"Powered by" Branding</span></li>
                     </ul>
+                    <button class="btn btn-secondary plan-btn" disabled style="opacity: 0.65; cursor: default;" type="button" data-i18n="currentPlan">Current Plan</button>
                 </div>
 
                 <div class="plan-card">
                     <div class="plan-header">
                         <h3 data-i18n="premiumPlan">Premium</h3>
                         <div class="price">IDR 150k<span data-i18n="perYear">/year</span></div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: -10px; margin-bottom: 15px;">1 Journal</div>
+                        <div class="plan-sub" data-i18n="perJournal">1 Journal</div>
                     </div>
                     <ul class="plan-features">
-                        <li><i data-lucide="sparkles" class="star"></i> <span>Advanced Citation Charts</span></li>
-                        <li><i data-lucide="sparkles" class="star"></i> <span>Daily Automatic Data Sync</span></li>
-                        <li><i data-lucide="sparkles" class="star"></i> <span>Automatic updates</span></li>
-                        <li><i data-lucide="sparkles" class="star"></i> <span>Priority Support</span></li>
+                        <li><i data-lucide="sparkles" class="star"></i> <span data-i18n="featPrem1">Advanced Citation Charts</span></li>
+                        <li><i data-lucide="sparkles" class="star"></i> <span data-i18n="featPrem3">Daily Automatic Data Sync</span></li>
+                        <li><i data-lucide="sparkles" class="star"></i> <span data-i18n="featPrem5">Automatic updates</span></li>
+                        <li><i data-lucide="sparkles" class="star"></i> <span data-i18n="featPrem4">Priority Support</span></li>
                     </ul>
-                    <a href="<?= base_url('login') ?>" class="btn btn-primary" style="background: var(--bg-soft); color: var(--text-main); box-shadow: none; border: 1px solid var(--glass-border); font-size: 0.9rem; padding: 0.75rem;">Get Started</a>
+                    <a href="<?= base_url('login') ?>" class="btn btn-secondary plan-btn" data-i18n="btnGetStarted">Get Started</a>
                 </div>
 
                 <div class="plan-card premium">
-                    <div class="plan-badge">RECOMMENDED</div>
+                    <div class="plan-badge" data-i18n="recommended">RECOMMENDED</div>
                     <div class="plan-header">
                         <h3 data-i18n="ultimatePlan">Ultimate</h3>
                         <div class="price">IDR 250k<span data-i18n="perYear">/year</span></div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: -10px; margin-bottom: 15px;">1 Journal</div>
+                        <div class="plan-sub" data-i18n="perJournal">1 Journal</div>
                     </div>
                     <ul class="plan-features">
-                        <li><i data-lucide="zap" class="star"></i> <strong>Everything in Premium</strong></li>
-                        <li><i data-lucide="zap" class="star"></i> <span>Whitelabel Configuration</span></li>
+                        <li><i data-lucide="zap" class="star"></i> <strong data-i18n="featUlt1">Everything in Premium</strong></li>
+                        <li><i data-lucide="zap" class="star"></i> <span data-i18n="featUlt2">Whitelabel Configuration</span></li>
+                        <li><i data-lucide="zap" class="star"></i> <span data-i18n="featUlt3">Custom Branding</span></li>
                     </ul>
-                    <a href="<?= base_url('login') ?>" class="btn btn-primary">Get Started Now</a>
+                    <a href="<?= base_url('login') ?>" class="btn btn-primary plan-btn" data-i18n="btnGetStarted">Get Started Now</a>
                 </div>
             </div>
 

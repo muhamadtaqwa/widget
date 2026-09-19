@@ -19,7 +19,7 @@ if (isset($_GET['d'])) {
     $stsc = $decoded['sc'] ?? '';
     $stct = $decoded['ct'] ?? '';
     $style = $decoded['st'] ?? 'text';
-    $primary = $decoded['p'] ?? '#4f46e5';
+    $primary = $decoded['p'] ?? '#0d9488';
     $text = $decoded['t'] ?? '#ffffff';
 } else {
     // Fallback lama jika parameter dikirim satuan
@@ -34,7 +34,7 @@ if (isset($_GET['d'])) {
     $stlid = $_GET['stlid'] ?? '';
     $stct = $_GET['stct'] ?? '';
     $style = $_GET['st'] ?? 'text';
-    $primary = $_GET['primary'] ?? '#4f46e5';
+    $primary = $_GET['primary'] ?? '#0d9488';
     $text = $_GET['text'] ?? '#ffffff';
 }
 
@@ -205,82 +205,161 @@ function formatNumber($num) {
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: <?php echo htmlspecialchars($primary); ?>;
+            --text-on-primary: <?php echo htmlspecialchars($text); ?>;
+            --tosca-50: #f0fdfa;
+            --tosca-100: #ccfbf1;
+            --tosca-500: #14b8a6;
+            --tosca-600: #0d9488;
+            --tosca-700: #0f766e;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-glass: rgba(13, 148, 136, 0.16);
+            --border-subtle: rgba(226, 232, 240, 0.85);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
             margin: 0; padding: 0; background: transparent; 
-            font-family: 'Inter', sans-serif; overflow: hidden; 
+            font-family: 'Poppins', sans-serif; overflow: hidden; 
             display: flex; align-items: flex-start; justify-content: center; 
             min-height: 100%; box-sizing: border-box;
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
         }
         .js-stat-widget { 
             width: 100%; max-width: 900px; margin: 0; 
-            color: #333; display: flex; flex-direction: column; 
-            background: #fff; border-radius: 12px; 
-            border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column; 
+            background: #ffffff; border-radius: 16px; 
+            border: 1.5px solid var(--border-glass); 
+            box-shadow: 0 10px 30px -5px rgba(13, 148, 136, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
             overflow: hidden;
+            position: relative;
+        }
+        .js-stat-widget::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3.5px;
+            background: linear-gradient(90deg, #0d9488 0%, #2dd4bf 50%, #0d9488 100%);
+            z-index: 2;
         }
         .widget-header {
-            background: <?php echo htmlspecialchars($primary); ?>;
-            color: <?php echo htmlspecialchars($text); ?>;
-            padding: 12px 15px; text-align: center; font-weight: 700; font-size: 14px;
+            background: linear-gradient(135deg, #0f766e 0%, var(--primary) 60%, #14b8a6 100%);
+            color: var(--text-on-primary);
+            padding: 13px 18px; text-align: center; font-weight: 700; font-size: 13.5px;
+            letter-spacing: 0.3px;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            box-shadow: inset 0 -1px 0 rgba(255,255,255,0.15);
         }
         .widget-body {
             display: grid; 
             grid-template-columns: 1fr;
-            gap: 8px;
-            padding: 12px;
+            gap: 10px;
+            padding: 14px;
+            background: #ffffff;
         }
         
         .stat-card {
             text-decoration: none; display: flex; 
             flex-direction: row; align-items: center; justify-content: space-between;
-            background: #fdfdfd; padding: 10px 15px; border-radius: 8px; 
-            border: 1px solid #f1f5f9; border-left: 5px solid #ddd;
-            transition: all 0.2s;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            padding: 11px 16px; border-radius: 12px; 
+            border: 1px solid var(--border-subtle);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .stat-info { display: flex; flex-direction: column; }
-        .stat-label { font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; }
-        .stat-sub { font-size: 9px; color: #94a3b8; }
-        .stat-value { font-size: 18px; font-weight: 800; }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            border-radius: 4px 0 0 4px;
+            transition: width 0.2s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.1);
+            border-color: rgba(13, 148, 136, 0.35);
+            background: linear-gradient(180deg, #ffffff 0%, #f0fdfa 100%);
+        }
+        .stat-card:hover::before {
+            width: 6px;
+        }
+        .stat-info { display: flex; flex-direction: column; gap: 2px; }
+        .stat-label { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-sub { font-size: 9px; color: #94a3b8; font-weight: 500; }
+        .stat-value { font-size: 20px; font-weight: 800; font-feature-settings: "tnum"; letter-spacing: -0.3px; }
 
         /* Responsive Grid & Card Layout */
         @media (min-width: 480px) {
             .widget-body { 
                 grid-template-columns: repeat(<?php echo $columnCount > 2 ? 2 : $columnCount; ?>, 1fr); 
                 gap: 12px; 
-                padding: 15px; 
+                padding: 16px; 
             }
-            .stat-card { flex-direction: column; padding: 20px 10px; border-left: 1px solid #f1f5f9; border-bottom: 5px solid #ddd; }
+            .stat-card { 
+                flex-direction: column; 
+                padding: 16px 12px; 
+                align-items: center; 
+                text-align: center; 
+            }
+            .stat-card::before {
+                left: 0; right: 0; bottom: 0; top: auto;
+                width: 100%; height: 3.5px;
+                border-radius: 0 0 12px 12px;
+            }
+            .stat-card:hover::before {
+                width: 100%; height: 5px;
+            }
             .stat-info { align-items: center; margin-bottom: 8px; }
             .stat-value { font-size: 24px; }
         }
         @media (min-width: 768px) {
             .widget-body { grid-template-columns: repeat(<?php echo $gridCols; ?>, 1fr); }
-            .stat-value { font-size: 28px; }
-            .stat-label { font-size: 11px; }
+            .stat-value { font-size: 26px; }
+            .stat-label { font-size: 10.5px; }
         }
 
-        .scopus { border-color: #ff8200; } .scopus .stat-value { color: #ff8200; }
-        .sinta { border-color: #10586e; } .sinta .rank-badge { 
-            font-size: 18px; font-weight: 800; color: #fff; 
-            background: #10586e; padding: 2px 10px; border-radius: 6px; 
+        .scopus::before { background: linear-gradient(180deg, #ff8200, #ea580c); } 
+        .scopus .stat-value { color: #ea580c; }
+        
+        .sinta::before { background: linear-gradient(180deg, #0d9488, #14b8a6); } 
+        .sinta .rank-badge { 
+            font-size: 15px; font-weight: 800; color: #fff; 
+            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%); 
+            padding: 3px 12px; border-radius: 999px; 
+            box-shadow: 0 2px 8px rgba(13, 148, 136, 0.3);
+            letter-spacing: 0.3px;
         }
-        .impact { border-color: #10586e; } .impact .stat-value { color: #10586e; }
-        .scholar { border-color: #5c87f1; } .scholar .stat-value { color: #5c87f1; }
-        .openalex { border-color: #0e0e0e; } .openalex .stat-value { color: #0e0e0e; }
-        .statcounter { border-color: #032964; } .statcounter .stat-value { color: #032964; }
+        .impact::before { background: linear-gradient(180deg, #0f766e, #0d9488); } 
+        .impact .stat-value { color: #0d9488; }
+        
+        .scholar::before { background: linear-gradient(180deg, #3b82f6, #2563eb); } 
+        .scholar .stat-value { color: #2563eb; }
+        
+        .openalex::before { background: linear-gradient(180deg, #334155, #0f172a); } 
+        .openalex .stat-value { color: #0f172a; }
+        
+        .statcounter::before { background: linear-gradient(180deg, #0284c7, #0369a1); } 
+        .statcounter .stat-value { color: #0369a1; }
 
-        /* ===== LOGO MODE — Colored filled cards ===== */
+        /* ===== LOGO MODE — Modern vibrant gradient cards ===== */
         .widget-body-logo {
             display: grid;
-            grid-template-columns: 1fr;   /* default: 1 kolom, stack ke bawah (sama seperti text mode di sidebar) */
-            gap: 8px;
-            padding: 12px;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            padding: 14px;
+            background: #ffffff;
         }
         @media (min-width: 380px) {
-            .widget-body-logo { grid-template-columns: repeat(2, 1fr); }
+            .widget-body-logo { grid-template-columns: repeat(2, 1fr); gap: 12px; }
         }
         @media (min-width: 520px) {
             .widget-body-logo { grid-template-columns: repeat(3, 1fr); }
@@ -293,42 +372,67 @@ function formatNumber($num) {
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             padding: 12px 14px;
-            border-radius: 10px;
+            border-radius: 12px;
             color: #fff;
-            transition: filter 0.2s, transform 0.15s;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             min-height: 72px;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
         }
-        .scard:hover { filter: brightness(1.12); transform: translateY(-2px); }
+        .scard::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 45%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, transparent 100%);
+            pointer-events: none;
+        }
+        .scard:hover { 
+            transform: translateY(-2px); 
+            filter: brightness(1.08); 
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+        }
         .scard-icon {
-            width: 46px; height: 46px; flex-shrink: 0;
+            width: 44px; height: 44px; flex-shrink: 0;
             background: #ffffff;
-            border-radius: 50%;
+            border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden; padding: 4px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
         }
-        .scard-icon img { width: 30px; height: 30px; object-fit: contain; }
+        .scard-icon img { width: 28px; height: 28px; object-fit: contain; }
         .scard-body { display: flex; flex-direction: column; gap: 1px; }
-        .scard-name { font-size: 10px; font-weight: 700; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.3px; }
-        .scard-value { font-size: 22px; font-weight: 800; line-height: 1.15; }
-        .scard-sub { font-size: 9px; opacity: 0.75; }
+        .scard-name { font-size: 10px; font-weight: 700; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.4px; }
+        .scard-value { font-size: 21px; font-weight: 800; line-height: 1.15; letter-spacing: -0.3px; }
+        .scard-sub { font-size: 9px; opacity: 0.8; }
         /* rank badge in logo mode */
         .scard-badge {
-            display: inline-block; font-size: 20px; font-weight: 800;
+            display: inline-block; font-size: 16px; font-weight: 800;
             background: rgba(255,255,255,0.25);
-            padding: 2px 10px; border-radius: 6px; line-height: 1.4;
+            backdrop-filter: blur(4px);
+            padding: 2px 10px; border-radius: 999px; line-height: 1.4;
+            border: 1px solid rgba(255, 255, 255, 0.35);
         }
         /* Platform brand colors */
-        .scard-scopus     { background: linear-gradient(135deg, #ff8200, #cc6800); }
-        .scard-sinta      { background: linear-gradient(135deg, #10586e, #0a3d4f); }
-        .scard-impact     { background: linear-gradient(135deg, #10586e, #0a3d4f); }
-        .scard-scholar    { background: linear-gradient(135deg, #5c87f1, #3a67d4); }
-        .scard-openalex   { background: linear-gradient(135deg, #2a2a2a, #0e0e0e); }
-        .scard-statcounter{ background: linear-gradient(135deg, #1a4a8a, #032964); }
+        .scard-scopus     { background: linear-gradient(135deg, #ff8200 0%, #ea580c 100%); box-shadow: 0 4px 12px rgba(255, 130, 0, 0.2); }
+        .scard-sinta      { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2); }
+        .scard-impact     { background: linear-gradient(135deg, #0f766e 0%, #115e59 100%); box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2); }
+        .scard-scholar    { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2); }
+        .scard-openalex   { background: linear-gradient(135deg, #334155 0%, #0f172a 100%); box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2); }
+        .scard-statcounter{ background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2); }
         
-        .widget-footer { font-size: 9px; color: #94a3b8; text-align: center; padding: 8px 0; background: #fafafa; border-top: 1px solid #f1f5f9; }
+        .widget-footer { 
+            font-size: 10px; color: var(--text-muted); text-align: center; 
+            padding: 9px 12px; background: #f8fafc; 
+            border-top: 1px solid var(--border-subtle);
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .widget-footer a { color: var(--tosca-600); text-decoration: none; font-weight: 600; }
+        .widget-footer a:hover { color: var(--tosca-700); text-decoration: underline; }
+        .f-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--tosca-600); display: inline-block; }
     </style>
 </head>
 <body>
@@ -461,7 +565,10 @@ function formatNumber($num) {
         <?php endif; ?>
         </div>
         <?php if (!isset($_GET['wl']) || $_GET['wl'] != '1'): ?>
-        <div class="widget-footer">Updated via <a href="<?= rtrim(base_url(), '/') ?>" target="_blank" style="color: inherit; text-decoration: none; font-weight: 600;">I-Widget</a> &bull; <?php echo date('Y'); ?></div>
+        <div class="widget-footer">
+            <span class="f-dot"></span>
+            <span>Live Data via <a href="<?= rtrim(base_url(), '/') ?>" target="_blank">I-Widget</a> &bull; <?php echo date('Y'); ?></span>
+        </div>
         <?php endif; ?>
     </div>
 </body>

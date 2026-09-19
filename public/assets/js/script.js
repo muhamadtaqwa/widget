@@ -75,6 +75,7 @@ const i18n = {
     featUlt3: "Custom Branding",
     recommended: "RECOMMENDED",
     btnGetStarted: "Get Started Now",
+    currentPlan: "Current Plan",
     modalFooter:
       'Already have a premium account? <a href="/login">Login here</a>',
   },
@@ -155,6 +156,7 @@ const i18n = {
     featUlt3: "Branding Kustom",
     recommended: "DIREKOMENDASIKAN",
     btnGetStarted: "Mulai Sekarang",
+    currentPlan: "Paket Saat Ini",
     modalFooter: 'Sudah punya akun premium? <a href="/login">Login di sini</a>',
   },
 };
@@ -185,6 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
   applyTranslations();
   lucide.createIcons();
   initPremiumModal();
+  initSidebarToggle();
 });
 
 function initPremiumModal() {
@@ -229,6 +232,24 @@ function initPremiumModal() {
   }
 }
 
+function initSidebarToggle() {
+  const simSidebarBtn = document.getElementById("simSidebarBtn");
+  const simFullBtn = document.getElementById("simFullBtn");
+  const previewBox = document.getElementById("widgetPreview");
+  if (simSidebarBtn && simFullBtn && previewBox) {
+    simSidebarBtn.addEventListener("click", () => {
+      simSidebarBtn.classList.add("active");
+      simFullBtn.classList.remove("active");
+      previewBox.classList.remove("full-width");
+    });
+    simFullBtn.addEventListener("click", () => {
+      simFullBtn.classList.add("active");
+      simSidebarBtn.classList.remove("active");
+      previewBox.classList.add("full-width");
+    });
+  }
+}
+
 const inputs = {
   journalName: document.getElementById("journalName"),
   sintaId: document.getElementById("sintaId"),
@@ -255,11 +276,28 @@ const inputs = {
 };
 
 const widgetTypeRadios = document.querySelectorAll('input[name="widgetType"]');
-const chartOptions = document.getElementById("chartOptions");
-const tableStyleOption = document.getElementById("tableStyleOption");
 const tableStyleRadios = document.querySelectorAll('input[name="tableStyle"]');
-const showOpenAlexChart = document.getElementById("showOpenAlexChart");
+
+const groupChartOptions = document.getElementById("groupChartOptions");
+const tableStyleOption = document.getElementById("tableStyleOption");
+const journalNameGroup = document.getElementById("journalNameGroup");
+const sintaIdGroup = document.getElementById("sintaIdGroup");
+const scopusCitationsGroup = document.getElementById("scopusCitationsGroup");
+const scholarIdGroup = document.getElementById("scholarIdGroup");
+const eissnGroup = document.getElementById("eissnGroup");
+const statcounterUrlGroup = document.getElementById("statcounterUrlGroup");
+const statcounterCountGroup = document.getElementById("statcounterCountGroup");
+const scimagoIdGroup = document.getElementById("scimagoIdGroup");
+const quartileSection = document.getElementById("quartileSection");
+const sjrSection = document.getElementById("sjrSection");
+const indexingLinksGroup = document.getElementById("indexingLinksGroup");
+const toolsLinksGroup = document.getElementById("toolsLinksGroup");
+const templateLinksGroup = document.getElementById("templateLinksGroup");
+const primaryColorGroup = document.getElementById("primaryColorGroup");
+const textColorGroup = document.getElementById("textColorGroup");
+
 const showScholarChart = document.getElementById("showScholarChart");
+const showOpenAlexChart = document.getElementById("showOpenAlexChart");
 
 function formatNumber(num) {
   if (!num) return "0";
@@ -328,7 +366,7 @@ function generateIframeHTML() {
       : "";
     const sintaId = inputs.sintaId.value;
 
-    return `<iframe src="${baseUrl}widgets/graph?issn=${issn}&id=${gsId}&sinta=${sintaId}&warna=${color}" width="100%" height="600" frameborder="0" scrolling="no" style="border:0; overflow:hidden; min-height: 500px;"></iframe>`;
+    return `<iframe src="${baseUrl}widgets/graph?issn=${issn}&id=${gsId}&sinta=${sintaId}&warna=${color}" width="100%" height="380" frameborder="0" scrolling="no" style="border:0; overflow:hidden; width: 100%; max-width: 100%;"></iframe>`;
   }
 
   if (widgetType === "scimago") {
@@ -356,19 +394,21 @@ function generateIframeHTML() {
       ),
     );
 
-    let h = 480;
-    if (!name) h -= 40;
-
+    let h = 420;
+    if (!name) h -= 35;
     const rowCount = Math.max(quartileData.length, sjrData.length);
-    if (rowCount > 5) h += (rowCount - 5) * 35;
+    if (rowCount > 5) h += (rowCount - 5) * 32;
 
-    return `<iframe src="${baseUrl}widgets/scimago?id=${scimagoId}&warna=${color}&name=${encodeURIComponent(name)}&data=${manualData}" width="100%" height="${h}" frameborder="0" scrolling="no" style="border:0; overflow:hidden;"></iframe>`;
+    return `<iframe src="${baseUrl}widgets/scimago?id=${scimagoId}&warna=${color}&name=${encodeURIComponent(name)}&data=${manualData}" width="100%" height="${h}" frameborder="0" scrolling="no" style="border:0; overflow:hidden; width: 100%; max-width: 100%;"></iframe>`;
   }
 
   if (widgetType === "indexing") {
     const color = inputs.primaryColor.value.replace("#", "");
     const params = new URLSearchParams();
     params.append("warna", color);
+    if (inputs.journalName.value) {
+      params.append("name", inputs.journalName.value);
+    }
 
     const indexingKeys = {
       sinta: "urlSinta",
@@ -381,19 +421,29 @@ function generateIframeHTML() {
       scilit: "urlScilit",
     };
 
+    let logoCount = 0;
     Object.entries(indexingKeys).forEach(([paramKey, inputKey]) => {
       const inputEl = inputs[inputKey];
       if (inputEl && inputEl.value) {
         params.append(paramKey, inputEl.value);
+        logoCount++;
       }
     });
-    return `<iframe src="${baseUrl}widgets/indexing?${params.toString()}" width="100%" height="380" frameborder="0" scrolling="no" style="border:0; overflow:hidden;"></iframe>`;
+
+    const rows = Math.ceil(Math.max(logoCount, 1) / 2);
+    let h = 46 + rows * 66;
+    if (inputs.journalName.value) h += 40;
+
+    return `<iframe src="${baseUrl}widgets/indexing?${params.toString()}" width="100%" height="${h}" frameborder="0" scrolling="no" style="border:0; overflow:hidden; width: 100%; max-width: 100%;"></iframe>`;
   }
 
   if (widgetType === "tools") {
     const color = inputs.primaryColor.value.replace("#", "");
     const params = new URLSearchParams();
     params.append("warna", color);
+    if (inputs.journalName.value) {
+      params.append("name", inputs.journalName.value);
+    }
 
     const toolsKeys = {
       turnitin: "urlTurnitin",
@@ -402,13 +452,20 @@ function generateIframeHTML() {
       quillbot: "urlQuillbot",
     };
 
+    let toolCount = 0;
     Object.entries(toolsKeys).forEach(([paramKey, inputKey]) => {
       const inputEl = inputs[inputKey];
       if (inputEl && inputEl.value) {
         params.append(paramKey, inputEl.value);
+        toolCount++;
       }
     });
-    return `<iframe src="${baseUrl}widgets/tools?${params.toString()}" width="100%" height="220" frameborder="0" scrolling="no" style="border:0; overflow:hidden;"></iframe>`;
+
+    const tRows = Math.ceil(Math.max(toolCount, 1) / 2);
+    let h = 46 + tRows * 66;
+    if (inputs.journalName.value) h += 40;
+
+    return `<iframe src="${baseUrl}widgets/tools?${params.toString()}" width="100%" height="${h}" frameborder="0" scrolling="no" style="border:0; overflow:hidden; width: 100%; max-width: 100%;"></iframe>`;
   }
 
   if (widgetType === "template") {
@@ -429,10 +486,11 @@ function generateIframeHTML() {
       unescape(encodeURIComponent(JSON.stringify(templateData))),
     );
 
-    let h = 80 + templateData.length * 70;
+    let h = 46 + templateData.length * 56;
+    if (name) h += 40;
     if (h < 120) h = 120;
 
-    return `<iframe src="${baseUrl}widgets/templates?data=${encodedData}&warna=${color}&name=${encodeURIComponent(name)}" width="100%" height="${h}" frameborder="0" scrolling="no" style="border:0; overflow:hidden;"></iframe>`;
+    return `<iframe src="${baseUrl}widgets/templates?data=${encodedData}&warna=${color}&name=${encodeURIComponent(name)}" width="100%" height="${h}" frameborder="0" scrolling="no" style="border:0; overflow:hidden; width: 100%; max-width: 100%;"></iframe>`;
   }
 
   const dataObj = {
@@ -466,14 +524,13 @@ function generateIframeHTML() {
   if (showOpenAlex) cardRows++;
   if (showStatcounter) cardRows++;
 
-  let rows = Math.ceil(cardRows / 3);
-  if (cardRows <= 4) rows = 1;
-  let height = rows * 180 + 100;
-  if (!inputs.journalName.value) height -= 40;
-  if (height > 600) height = 600;
-  if (height < 200) height = 200;
+  // Calculate height optimized for OJS sidebar stacking
+  const isLogo = dataObj.st === "logo";
+  const cardHeight = isLogo ? 82 : 56;
+  let h = 68 + cardRows * cardHeight;
+  if (inputs.journalName.value) h += 42;
 
-  return `<iframe src="${baseUrl}widgets/statistik?d=${encodedData}" width="100%" height="${height}" frameborder="0" scrolling="no" style="border:0; overflow:hidden;"></iframe>`;
+  return `<iframe src="${baseUrl}widgets/statistik?d=${encodedData}" width="100%" height="${h}" frameborder="0" scrolling="no" style="border:0; overflow:hidden; width: 100%; max-width: 100%;"></iframe>`;
 }
 
 function updatePreview() {

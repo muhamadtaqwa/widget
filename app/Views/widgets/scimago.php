@@ -5,14 +5,14 @@ ini_set('display_errors', 0);
 // Otomatis deteksi base URL domain dan folder aplikasi
 
 $id          = $_GET['id']    ?? '';
-$warna       = $_GET['warna'] ?? '4f46e5';
+$warna       = $_GET['warna'] ?? '0d9488';
 $rawData     = $_GET['data']  ?? '';
 $journalName = trim($_GET['name'] ?? '');
 
 // Sanitize
 $id    = preg_replace('/[^a-zA-Z0-9]/', '', $id);
 $warna = preg_replace('/[^a-fA-F0-9]/', '', $warna);
-if (strlen($warna) < 6) $warna = '4f46e5';
+if (strlen($warna) < 6) $warna = '0d9488';
 
 $scimagoUrl = "https://www.scimagojr.com/journalsearch.php?q=$id&tip=sid&clean=0";
 $scimagoImg = "https://www.scimagojr.com/journal_img.php?id=$id";
@@ -55,16 +55,19 @@ function qClass($q) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scimago Widget</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #<?php echo $warna; ?>;
             --primary-rgb: <?php echo "$r, $g, $b"; ?>;
             --primary-light: rgba(var(--primary-rgb), 0.12);
-            --text-main: #1e293b;
+            --text-main: #0f172a;
             --text-muted: #64748b;
             --bg-card: #ffffff;
-            --border: #e2e8f0;
+            --border: rgba(226, 232, 240, 0.85);
+            --border-glass: rgba(13, 148, 136, 0.16);
             --bg-row-alt: #f8fafc;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -73,34 +76,33 @@ function qClass($q) {
             background: transparent;
             color: var(--text-main);
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
         .widget-container {
             background: var(--bg-card);
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            border-radius: 14px;
+            border: 1.5px solid var(--border-glass);
+            box-shadow: 0 10px 25px -5px rgba(13, 148, 136, 0.08), 0 2px 6px rgba(0,0,0,0.03);
             display: flex;
             flex-direction: column;
             width: 100%;
             max-width: 400px;
-            min-height: <?php echo $journalName ? '440px' : '400px'; ?>;
+            min-height: <?php echo $journalName ? '420px' : '380px'; ?>;
             height: auto;
             overflow: hidden;
-            margin: 10px auto;
+            margin: 0 auto;
             position: relative;
-        }
-        .widget-container.no-header::before {
-            display: none;
         }
         .widget-container::before {
             content: '';
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 4px;
-            background: linear-gradient(90deg, var(--primary), rgba(var(--primary-rgb), 0.5));
+            top: 0; left: 0; right: 0;
+            height: 3.5px;
+            background: linear-gradient(90deg, #0d9488 0%, #2dd4bf 50%, #0d9488 100%);
+            z-index: 2;
         }
         .widget-header {
-            padding: 14px 16px 10px;
+            padding: 12px 14px 8px;
             background: #f8fafc;
             border-bottom: 1px solid var(--border);
         }
@@ -111,32 +113,39 @@ function qClass($q) {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            letter-spacing: 0.2px;
         }
         .tabs {
             display: flex;
             background: #f1f5f9;
-            padding: 4px;
+            padding: 3px;
+            margin: 8px 10px 4px;
+            border-radius: 8px;
             gap: 3px;
+            border: 1px solid var(--border);
         }
         .tab-btn {
             flex: 1;
-            padding: 7px 4px;
-            font-size: 10px;
+            padding: 6px 3px;
+            font-size: 9.5px;
             font-weight: 700;
             border: none;
             background: transparent;
             color: var(--text-muted);
             cursor: pointer;
-            border-radius: 7px;
-            transition: all 0.2s;
+            border-radius: 6px;
+            transition: all 0.2s ease;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             font-family: 'Poppins', sans-serif;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .tab-btn.active {
             background: white;
             color: var(--primary);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
         }
         .tab-content {
             flex-grow: 1;
@@ -147,137 +156,150 @@ function qClass($q) {
 
         /* Overview */
         .overview-inner {
-            padding: 14px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
         }
         .scimago-img-link {
             display: block;
-            background: #f8fafc;
-            padding: 10px;
-            border-radius: 12px;
-            border: 1px dashed var(--border);
-            transition: transform 0.2s;
+            background: #ffffff;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1.5px dashed rgba(13, 148, 136, 0.25);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .scimago-img-link:hover { transform: scale(1.02); }
+        .scimago-img-link:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(13, 148, 136, 0.1);
+        }
         .scimago-img-link img { max-width: 100%; height: auto; border-radius: 4px; display: block; }
         .overview-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
         }
         .stat-card {
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px;
+            background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%);
+            border: 1px solid rgba(13, 148, 136, 0.18);
+            border-radius: 10px;
+            padding: 10px 8px;
             text-align: center;
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.1);
         }
         .stat-card .slabel {
             font-size: 9px;
             font-weight: 700;
-            color: var(--text-muted);
+            color: #0f766e;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .stat-card .svalue {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
             color: var(--primary);
+            font-feature-settings: "tnum";
         }
 
         /* Tables */
-        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
         thead th {
-            background: var(--primary-light);
-            color: var(--primary);
-            padding: 10px 12px;
+            background: #f0fdfa;
+            color: #0f766e;
+            padding: 8px 10px;
             font-weight: 700;
             text-align: left;
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
-            border-bottom: 2px solid var(--primary);
+            border-bottom: 1.5px solid rgba(13, 148, 136, 0.25);
         }
-        tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+        tbody td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
         tbody tr:nth-child(even) { background: var(--bg-row-alt); }
-        tbody tr:hover { background: var(--primary-light); }
+        tbody tr:hover { background: #f0fdfa; }
 
         .q-badge {
             display: inline-block;
             padding: 2px 8px;
-            border-radius: 5px;
+            border-radius: 999px;
             font-weight: 800;
             color: #fff;
-            font-size: 11px;
+            font-size: 10px;
             letter-spacing: 0.3px;
         }
-        .q1 { background: #10b981; }
-        .q2 { background: #f59e0b; }
-        .q3 { background: #f97316; }
-        .q4 { background: #ef4444; }
+        .q1 { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25); }
+        .q2 { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 2px 6px rgba(245, 158, 11, 0.25); }
+        .q3 { background: linear-gradient(135deg, #f97316, #ea580c); box-shadow: 0 2px 6px rgba(249, 115, 22, 0.25); }
+        .q4 { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25); }
         .qna { background: #94a3b8; }
 
         .empty-state {
-            padding: 30px 16px;
+            padding: 24px 14px;
             text-align: center;
             color: var(--text-muted);
-            font-size: 12px;
+            font-size: 11px;
         }
 
         /* SJR Progress Bar */
         .sjr-bar-row {
             display: flex;
             align-items: center;
-            padding: 8px 12px;
-            gap: 10px;
+            padding: 7px 10px;
+            gap: 8px;
             border-bottom: 1px solid var(--border);
         }
         .sjr-bar-row:nth-child(even) { background: var(--bg-row-alt); }
         .sjr-year-label {
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 700;
             color: var(--text-muted);
-            width: 38px;
+            width: 36px;
             flex-shrink: 0;
         }
         .sjr-bar-wrap {
             flex-grow: 1;
-            background: #e2e8f0;
-            border-radius: 99px;
-            height: 8px;
+            background: #f1f5f9;
+            border-radius: 999px;
+            height: 7px;
             overflow: hidden;
         }
         .sjr-bar-fill {
             height: 100%;
-            border-radius: 99px;
-            background: linear-gradient(90deg, var(--primary), rgba(var(--primary-rgb), 0.6));
-            transition: width 0.6s ease;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #0d9488, #2dd4bf);
         }
         .sjr-val-label {
             font-size: 11px;
             font-weight: 800;
             color: var(--primary);
-            width: 42px;
+            width: 44px;
             text-align: right;
             flex-shrink: 0;
+            font-feature-settings: "tnum";
         }
-
         .widget-footer {
-            padding: 8px 12px;
-            font-size: 10px;
             text-align: center;
+            font-size: 10px;
+            color: var(--text-muted);
+            padding: 9px 12px;
             background: #f8fafc;
             border-top: 1px solid var(--border);
-            color: var(--text-muted);
-            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
-        .widget-footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        .widget-footer a { color: #0d9488; text-decoration: none; font-weight: 600; }
+        .widget-footer a:hover { color: #0f766e; text-decoration: underline; }
+        .f-dot { width: 4px; height: 4px; border-radius: 50%; background: #0d9488; display: inline-block; }
 
         @media (max-width: 380px) {
             .overview-stats {
@@ -302,9 +324,9 @@ function qClass($q) {
         <?php endif; ?>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
-            <button class="tab-btn" onclick="showTab('quartiles')">Quartiles</button>
-            <button class="tab-btn" onclick="showTab('sjr')">SJR Rank</button>
+            <button class="tab-btn active" data-tab="overview" onclick="showTab(this, 'overview')">Overview</button>
+            <button class="tab-btn" data-tab="quartiles" onclick="showTab(this, 'quartiles')">Quartiles</button>
+            <button class="tab-btn" data-tab="sjr" onclick="showTab(this, 'sjr')">SJR Rank</button>
         </div>
 
         <!-- Overview Tab -->
@@ -383,16 +405,25 @@ function qClass($q) {
         </div>
 
         <?php if (!isset($_GET['wl']) || $_GET['wl'] != '1'): ?>
-        <div class="widget-footer">Updated via <a href="<?= rtrim(base_url(), '/') ?>" target="_blank" style="color: inherit; text-decoration: none; font-weight: 600;">I-Widget</a> &bull; <?php echo date('Y'); ?></div>
+        <div class="widget-footer">
+            <span class="f-dot"></span>
+            <span>Live Data via <a href="<?= rtrim(base_url(), '/') ?>" target="_blank">I-Widget</a> &bull; <?php echo date('Y'); ?></span>
+        </div>
         <?php endif; ?>
     </div>
 
     <script>
-        function showTab(tabId) {
+        function showTab(btn, tabId) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
-            document.getElementById(tabId).classList.add('active');
+            if (btn && btn.classList) {
+                btn.classList.add('active');
+            } else {
+                const targetBtn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+                if (targetBtn) targetBtn.classList.add('active');
+            }
+            const targetContent = document.getElementById(tabId);
+            if (targetContent) targetContent.classList.add('active');
         }
     </script>
 </body>

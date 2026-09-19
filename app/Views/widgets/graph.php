@@ -13,7 +13,7 @@ if (preg_match('/user=([^&]+)/', $gsId, $matches)) {
     $gsId = $matches[1];
 }
 
-$warna = $_GET['warna'] ?? '4f46e5';
+$warna = $_GET['warna'] ?? '0d9488';
 if (strpos($warna, '#') === 0) $warna = substr($warna, 1);
 $warnaHex = '#' . $warna;
 
@@ -196,17 +196,25 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Statistik Sitasi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: <?php echo $warnaHex; ?>;
-            --primary-light: <?php echo $warnaHex; ?>22;
-            --bg: #f8fafc;
+            --primary-rgb: <?php 
+                $cleanWarna = ltrim($warnaHex, '#');
+                [$r, $g, $b] = sscanf($cleanWarna, "%02x%02x%02x");
+                echo "$r, $g, $b";
+            ?>;
+            --primary-light: rgba(var(--primary-rgb), 0.12);
+            --bg: #ffffff;
             --card-bg: #ffffff;
-            --text-main: #1e293b;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --border: #e2e8f0;
+            --border-glass: rgba(13, 148, 136, 0.16);
+            --border-subtle: rgba(226, 232, 240, 0.85);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body {
@@ -215,143 +223,152 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
             overflow-x: hidden;
         }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: transparent;
             color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
         }
         .container {
             width: 100%;
-            max-width: 100%;   /* ikut lebar iframe/widget, tidak hardcode 1000px */
+            max-width: 100%;
             margin: 0 auto;
             background: var(--card-bg);
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            border: 1.5px solid var(--border-glass);
+            box-shadow: 0 10px 25px -5px rgba(13, 148, 136, 0.08), 0 2px 6px rgba(0,0,0,0.03);
+            position: relative;
+        }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3.5px;
+            background: linear-gradient(90deg, #0d9488 0%, #2dd4bf 50%, #0d9488 100%);
+            z-index: 2;
         }
         .tabs {
             display: flex;
             background: #f1f5f9;
-            border-bottom: 1px solid var(--border);
+            padding: 4px;
+            border-radius: 10px;
+            margin: 12px 10px 4px;
+            gap: 4px;
+            border: 1px solid var(--border-subtle);
         }
         .tab-btn {
             flex: 1;
-            padding: 10px 6px;
+            padding: 7px 6px;
             border: none;
-            background: none;
-            font-family: inherit;
+            background: transparent;
+            font-family: 'Poppins', sans-serif;
             font-size: 11px;
             font-weight: 700;
             color: var(--text-muted);
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.25s ease;
             text-align: center;
-            border-bottom: 3px solid transparent;
+            border-radius: 7px;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.4px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        @media (min-width: 400px) {
-            .tab-btn { padding: 14px; font-size: 13px; letter-spacing: 0.5px; }
-        }
         .tab-btn.active {
-            background: white;
+            background: #ffffff;
             color: var(--primary);
-            border-bottom-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
         .tab-btn:hover:not(.active) {
-            background: #e2e8f0;
+            background: rgba(255, 255, 255, 0.5);
             color: var(--text-main);
         }
         .tab-content {
             display: none;
-            padding: 12px;
-            animation: fadeIn 0.4s ease-out;
-        }
-        @media (min-width: 400px) {
-            .tab-content { padding: 20px; }
+            padding: 10px 12px;
+            animation: fadeIn 0.35s ease-out;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .tab-content.active {
             display: block;
         }
         .journal-name {
-            font-size: 18px;
+            font-size: 13px;
             font-weight: 800;
             color: var(--text-main);
-            margin-bottom: 20px;
-            border-left: 4px solid var(--primary);
-            padding-left: 12px;
-            line-height: 1.4;
+            margin-bottom: 12px;
+            border-left: 3.5px solid var(--primary);
+            padding-left: 10px;
+            line-height: 1.35;
         }
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);             /* default: 2 kolom di sidebar sempit */
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-        @media (min-width: 400px) {
-            .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-bottom: 10px;
         }
         .stat-box {
-            background: var(--bg);
-            padding: 15px;
+            background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%);
+            padding: 8px 4px;
             border-radius: 10px;
             text-align: center;
-            border: 1px solid var(--border);
-            transition: transform 0.2s;
+            border: 1px solid rgba(13, 148, 136, 0.16);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         .stat-box:hover {
-            transform: translateY(-3px);
-            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(13, 148, 136, 0.12);
         }
         .stat-label {
             display: block;
-            font-size: 11px;
+            font-size: 9px;
             font-weight: 700;
-            color: var(--text-muted);
+            color: #0f766e;
             text-transform: uppercase;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
+            letter-spacing: 0.3px;
         }
         .stat-value {
             display: block;
-            font-size: 20px;
+            font-size: 17px;
             font-weight: 800;
             color: var(--primary);
+            font-feature-settings: "tnum";
+            letter-spacing: -0.3px;
         }
         .chart-container {
             position: relative;
-            height: 200px;          /* lebih kompak di sidebar sempit */
+            height: 190px;
             width: 100%;
-            max-width: 100%;        /* jangan overflow */
-            background: #fff;
+            max-width: 100%;
+            background: #ffffff;
             padding: 6px;
-            border-radius: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-subtle);
             overflow: hidden;
         }
         .chart-container canvas {
             max-width: 100% !important;
         }
-        @media (min-width: 400px) {
-            .chart-container { height: 240px; padding: 10px; }
-        }
-        @media (min-width: 640px) {
-            .chart-container { height: 280px; }
-        }
         .widget-footer {
             text-align: center;
             font-size: 10px;
             color: var(--text-muted);
-            padding: 12px;
+            padding: 9px 12px;
             background: #f8fafc;
-            border-top: 1px solid var(--border);
-            font-weight: 500;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
+        .widget-footer a { color: #0d9488; text-decoration: none; font-weight: 600; }
+        .widget-footer a:hover { color: #0f766e; text-decoration: underline; }
+        .f-dot { width: 4px; height: 4px; border-radius: 50%; background: #0d9488; display: inline-block; }
     </style>
 </head>
 <body>
@@ -413,7 +430,10 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
     <?php endif; ?>
 
     <?php if (!isset($_GET['wl']) || $_GET['wl'] != '1'): ?>
-    <div class="widget-footer">Updated via <a href="<?= rtrim(base_url(), '/') ?>" target="_blank" style="color: inherit; text-decoration: none; font-weight: 600;">I-Widget</a> &bull; <?php echo date('Y'); ?></div>
+    <div class="widget-footer">
+        <span class="f-dot"></span>
+        <span>Live Data via <a href="<?= rtrim(base_url(), '/') ?>" target="_blank">I-Widget</a> &bull; <?php echo date('Y'); ?></span>
+    </div>
     <?php endif; ?>
 </div>
 

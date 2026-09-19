@@ -30,13 +30,11 @@ class Filters extends BaseFilters
 
     public array $required = [
         'before' => [
-            'forcehttps',
             'pagecache',
         ],
         'after' => [
             'pagecache',
             'performance',
-            'toolbar',
         ],
     ];
 

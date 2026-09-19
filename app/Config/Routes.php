@@ -6,6 +6,7 @@ use CodeIgniter\Router\RouteCollection;
 
 // ===== Public =====
 $routes->get('/', 'Home::index');
+$routes->get('preview', 'Home::preview');
 
 // ===== Auth =====
 $routes->get('login', 'Auth::login');

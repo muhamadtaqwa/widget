@@ -8,19 +8,19 @@ class Journal extends BaseController
 {
     public function edit($id = null)
     {
+        if (!$id) {
+            return redirect()->to('/');
+        }
+
         $userId = session()->get('user_id');
         $widgetModel = new WidgetModel();
 
-        if ($id) {
-            $widget = $widgetModel->where('id', $id)
-                ->where('user_id', $userId)
-                ->first();
+        $widget = $widgetModel->where('id', $id)
+            ->where('user_id', $userId)
+            ->first();
 
-            if (!$widget) {
-                return redirect()->to('/dashboard')->with('error', 'Widget tidak ditemukan.');
-            }
-        } else {
-            $widget = null;
+        if (!$widget) {
+            return redirect()->to('/dashboard')->with('error', 'Widget tidak ditemukan.');
         }
 
         return view('dashboard/edit', [
