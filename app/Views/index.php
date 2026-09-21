@@ -123,7 +123,6 @@ $currentStyle = $val('table_style', 'text');
                 <span class="feature-chip"><i data-lucide="smartphone"></i> Responsif Mobile &amp; Desktop</span>
                 <span class="feature-chip"><i data-lucide="refresh-cw"></i> Sinkronisasi Sinta &amp; OpenAlex</span>
                 <span class="feature-chip"><i data-lucide="code-2"></i> 1-Click Embed Iframe</span>
-                <span class="feature-chip"><i data-lucide="shield-check"></i> Bebas Emoji &amp; Profesional</span>
             </div>
         </header>
 
