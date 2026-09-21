@@ -50,8 +50,8 @@ if (!empty($_GET['data'])) {
         .widget-container {
             background: var(--bg-card);
             border-radius: 14px;
-            border: 1.5px solid var(--border-glass);
-            box-shadow: 0 10px 25px -5px rgba(13, 148, 136, 0.08), 0 2px 6px rgba(0,0,0,0.03);
+            border: none;
+            box-shadow: none;
             display: flex;
             flex-direction: column;
             width: 100%;
@@ -61,12 +61,7 @@ if (!empty($_GET['data'])) {
             overflow: hidden;
         }
         .widget-container::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3.5px;
-            background: linear-gradient(90deg, #0d9488 0%, #2dd4bf 50%, #0d9488 100%);
-            z-index: 2;
+            display: none;
         }
         .widget-header {
             padding: 12px 14px 8px;

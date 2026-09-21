@@ -236,18 +236,13 @@ function formatNumber($num) {
             width: 100%; max-width: 900px; margin: 0; 
             display: flex; flex-direction: column; 
             background: #ffffff; border-radius: 16px; 
-            border: 1.5px solid var(--border-glass); 
-            box-shadow: 0 10px 30px -5px rgba(13, 148, 136, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
+            border: none; 
+            box-shadow: none;
             overflow: hidden;
             position: relative;
         }
         .js-stat-widget::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3.5px;
-            background: linear-gradient(90deg, #0d9488 0%, #2dd4bf 50%, #0d9488 100%);
-            z-index: 2;
+            display: none;
         }
         .widget-header {
             background: linear-gradient(135deg, #0f766e 0%, var(--primary) 60%, #14b8a6 100%);

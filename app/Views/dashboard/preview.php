@@ -33,7 +33,7 @@
         </div>
 
         <div class="preview-workspace">
-            <iframe src="<?= base_url('widget_loader?id=' . esc($widget['widget_id'])) ?>" style="width: 100%; max-width: 440px; height: 520px; border: none; border-radius: var(--radius-md); box-shadow: var(--shadow-sm);" title="Widget Preview"></iframe>
+            <iframe src="<?= base_url('widget_loader?id=' . esc($widget['widget_id'])) ?>" style="width: 100%; max-width: 440px; height: 520px; border: none; border-radius: var(--radius-md);" title="Widget Preview"></iframe>
         </div>
 
         <div class="card-header" style="margin-top: 2rem; margin-bottom: 1rem;">
