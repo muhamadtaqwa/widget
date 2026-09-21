@@ -1118,7 +1118,7 @@ img, svg {
   background:
     radial-gradient(circle at center, rgba(20, 184, 166, 0.05) 0%, transparent 70%),
     var(--bg-subtle);
-  border: 1.5px dashed var(--glass-border-strong);
+  border: none;
   border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;

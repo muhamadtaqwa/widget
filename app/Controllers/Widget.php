@@ -112,36 +112,50 @@ class Widget extends BaseController
             . '<iframe src="' . htmlspecialchars($iframeSrc) . '" height="' . $height . '" scrolling="no"></iframe>'
             . '</body></html>';
 
-        return $this->response->setBody($html);
+        return $this->response
+            ->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->setBody($html);
     }
 
     public function statistik()
     {
-        return view('widgets/statistik');
+        return $this->response
+            ->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->setBody(view('widgets/statistik'));
     }
 
     public function graph()
     {
-        return view('widgets/graph');
+        return $this->response
+            ->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->setBody(view('widgets/graph'));
     }
 
     public function scimago()
     {
-        return view('widgets/scimago');
+        return $this->response
+            ->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->setBody(view('widgets/scimago'));
     }
 
     public function indexing()
     {
-        return view('widgets/indexing');
+        return $this->response
+            ->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->setBody(view('widgets/indexing'));
     }
 
     public function tools()
     {
-        return view('widgets/tools');
+        return $this->response
+            ->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->setBody(view('widgets/tools'));
     }
 
     public function templates()
     {
-        return view('widgets/templates');
+        return $this->response
+            ->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->setBody(view('widgets/templates'));
     }
 }
