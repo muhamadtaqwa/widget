@@ -70,22 +70,25 @@ class Journal extends BaseController
     public function builder($id = null)
     {
         $userId = session()->get('user_id');
-        $widgetModel = new WidgetModel();
-
-        if ($id) {
-            $widget = $widgetModel->where('id', $id)
-                ->where('user_id', $userId)
-                ->first();
-
-            if (!$widget) {
-                return redirect()->to('/dashboard');
-            }
-
-            // Redirect ke landing page dengan parameter edit
-            return redirect()->to('/?edit=' . $id);
+        if (!$userId) {
+            return redirect()->to(base_url('login'));
         }
 
-        return redirect()->to('/');
+        if (!$id) {
+            return redirect()->to(base_url());
+        }
+
+        $widgetModel = new WidgetModel();
+        $widget = $widgetModel->where('id', $id)
+            ->where('user_id', $userId)
+            ->first();
+
+        if (!$widget) {
+            return redirect()->to(base_url('dashboard'))->with('error', 'Widget tidak ditemukan.');
+        }
+
+        // Redirect ke landing page dengan parameter edit menggunakan base_url
+        return redirect()->to(base_url('?edit=' . $id));
     }
     public function delete($id)
     {

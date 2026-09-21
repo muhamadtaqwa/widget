@@ -20,27 +20,41 @@ $seo = [
 $currentSeo = $seo[$lang];
 
 // ===== Load widget data if edit mode =====
-$editWidgetId = $_GET['edit'] ?? null;
-$w = null;
-$settings = [];
+$editWidgetId = $editWidgetId ?? ($_GET['edit'] ?? null);
+$w            = $w ?? null;
+$settings     = $settings ?? [];
 
-if ($editWidgetId) {
+if ($editWidgetId && !$w && session()->get('user_id')) {
     $widgetModel = new \App\Models\WidgetModel();
     $w = $widgetModel->where('id', $editWidgetId)
         ->where('user_id', session()->get('user_id'))
         ->first();
 
     if ($w) {
-        $settings = json_decode($w['settings'], true) ?? [];
+        $decoded = json_decode($w['settings'] ?? '', true);
+        $settings = is_array($decoded) ? $decoded : [];
     }
 }
 
 $val = function ($key, $default = '') use ($settings) {
-    return $settings[$key] ?? $default;
+    if (is_array($settings) && isset($settings[$key])) {
+        return is_scalar($settings[$key]) ? (string) $settings[$key] : $default;
+    }
+    if (is_object($settings) && isset($settings->{$key})) {
+        return is_scalar($settings->{$key}) ? (string) $settings->{$key} : $default;
+    }
+    return $default;
 };
 
 $valUrl = function ($key, $default = '') use ($settings) {
-    return $settings['urls'][$key] ?? $default;
+    $urls = $settings['urls'] ?? ($settings->urls ?? null);
+    if (is_array($urls) && isset($urls[$key])) {
+        return is_scalar($urls[$key]) ? (string) $urls[$key] : $default;
+    }
+    if (is_object($urls) && isset($urls->{$key})) {
+        return is_scalar($urls->{$key}) ? (string) $urls->{$key} : $default;
+    }
+    return $default;
 };
 
 $currentType  = $val('widget_type', 'table');

@@ -59,6 +59,8 @@ class Filters extends BaseFilters
                 'dashboard/*',
                 'admin',
                 'admin/*',
+                'journal',
+                'journal/*',
                 'widget',
                 'widget/*',
             ],
