@@ -56,7 +56,7 @@ if (!empty($issn)) {
             $openAlexData['total'] = $data['cited_by_count'] ?? 0;
             $openAlexData['h_index'] = $data['summary_stats']['h_index'] ?? 0;
             $openAlexData['i10_index'] = $data['summary_stats']['i10_index'] ?? 0;
-            
+
             if (isset($data['counts_by_year'])) {
                 $history = [];
                 foreach ($data['counts_by_year'] as $entry) {
@@ -76,7 +76,7 @@ if (!empty($issn)) {
 // Fetch Google Scholar
 if (!empty($gsId)) {
     $success = false;
-    
+
     // Step 1: Try direct Google Scholar (Mungkin kena limit)
     $url = "https://scholar.google.co.id/citations?user=$gsId&hl=en";
     $ch = curl_init();
@@ -132,15 +132,15 @@ if (!empty($gsId)) {
                 $scholarData['h_index'] = trim($statMatches[2]);
                 $scholarData['i10_index'] = trim($statMatches[3]);
             }
-            
+
             // Extract Chart History
             if (preg_match('/option_gs_citation_peryear.*?xAxis:.*?data: \[(.*?)\].*?series:.*?data: \[(.*?)\]/s', $html, $chartMatches)) {
                 $yearsRaw = $chartMatches[1];
                 $countsRaw = $chartMatches[2];
-                
+
                 preg_match_all("/'(\d+)'/", $yearsRaw, $yearArr);
                 preg_match_all("/(\d+)/", $countsRaw, $countArr);
-                
+
                 if (!empty($yearArr[1])) {
                     $history = [];
                     foreach ($yearArr[1] as $i => $year) {
@@ -192,6 +192,7 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -203,11 +204,11 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
     <style>
         :root {
             --primary: <?php echo $warnaHex; ?>;
-            --primary-rgb: <?php 
-                $cleanWarna = ltrim($warnaHex, '#');
-                [$r, $g, $b] = sscanf($cleanWarna, "%02x%02x%02x");
-                echo "$r, $g, $b";
-            ?>;
+            --primary-rgb: <?php
+                            $cleanWarna = ltrim($warnaHex, '#');
+                            [$r, $g, $b] = sscanf($cleanWarna, "%02x%02x%02x");
+                            echo "$r, $g, $b";
+                            ?>;
             --primary-light: rgba(var(--primary-rgb), 0.12);
             --bg: #ffffff;
             --card-bg: #ffffff;
@@ -216,18 +217,27 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
             --border-glass: rgba(13, 148, 136, 0.16);
             --border-subtle: rgba(226, 232, 240, 0.85);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body {
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
             width: 100%;
             max-width: 100%;
             overflow-x: hidden;
         }
+
         body {
             font-family: 'Poppins', sans-serif;
             background: transparent;
             color: var(--text-main);
             -webkit-font-smoothing: antialiased;
         }
+
         .container {
             width: 100%;
             max-width: 100%;
@@ -239,9 +249,11 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
             box-shadow: none;
             position: relative;
         }
+
         .container::before {
             display: none;
         }
+
         .tabs {
             display: flex;
             background: #f1f5f9;
@@ -251,6 +263,7 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
             gap: 4px;
             border: 1px solid var(--border-subtle);
         }
+
         .tab-btn {
             flex: 1;
             padding: 7px 6px;
@@ -270,27 +283,40 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .tab-btn.active {
             background: #ffffff;
             color: var(--primary);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
+
         .tab-btn:hover:not(.active) {
             background: rgba(255, 255, 255, 0.5);
             color: var(--text-main);
         }
+
         .tab-content {
             display: none;
             padding: 10px 12px;
             animation: fadeIn 0.35s ease-out;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         .tab-content.active {
             display: block;
         }
+
         .journal-name {
             font-size: 13px;
             font-weight: 800;
@@ -300,12 +326,14 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
             padding-left: 10px;
             line-height: 1.35;
         }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 6px;
             margin-bottom: 10px;
         }
+
         .stat-box {
             background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%);
             padding: 8px 4px;
@@ -314,10 +342,12 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
             border: 1px solid rgba(13, 148, 136, 0.16);
             transition: transform 0.2s, box-shadow 0.2s;
         }
+
         .stat-box:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 14px rgba(13, 148, 136, 0.12);
         }
+
         .stat-label {
             display: block;
             font-size: 9px;
@@ -327,6 +357,7 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
             margin-bottom: 2px;
             letter-spacing: 0.3px;
         }
+
         .stat-value {
             display: block;
             font-size: 17px;
@@ -335,6 +366,7 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
             font-feature-settings: "tnum";
             letter-spacing: -0.3px;
         }
+
         .chart-container {
             position: relative;
             height: 190px;
@@ -346,9 +378,11 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
             border: 1px solid var(--border-subtle);
             overflow: hidden;
         }
+
         .chart-container canvas {
             max-width: 100% !important;
         }
+
         .widget-footer {
             text-align: center;
             font-size: 10px;
@@ -361,148 +395,188 @@ $activeTab = $showOA ? 'openalex' : 'scholar';
             justify-content: center;
             gap: 6px;
         }
-        .widget-footer a { color: #0d9488; text-decoration: none; font-weight: 600; }
-        .widget-footer a:hover { color: #0f766e; text-decoration: underline; }
-        .f-dot { width: 4px; height: 4px; border-radius: 50%; background: #0d9488; display: inline-block; }
+
+        .widget-footer a {
+            color: #0d9488;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .widget-footer a:hover {
+            color: #0f766e;
+            text-decoration: underline;
+        }
+
+        .f-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #0d9488;
+            display: inline-block;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <div class="tabs">
+    <div class="container">
+        <div class="tabs">
+            <?php if ($showOA): ?>
+                <button class="tab-btn <?php echo $activeTab == 'openalex' ? 'active' : ''; ?>" onclick="openTab(event, 'oa-content')">OpenAlex</button>
+            <?php endif; ?>
+            <?php if ($showGS): ?>
+                <button class="tab-btn <?php echo $activeTab == 'scholar' ? 'active' : ''; ?>" onclick="openTab(event, 'gs-content')">Scholar</button>
+            <?php endif; ?>
+        </div>
+
         <?php if ($showOA): ?>
-        <button class="tab-btn <?php echo $activeTab == 'openalex' ? 'active' : ''; ?>" onclick="openTab(event, 'oa-content')">OpenAlex</button>
+            <div id="oa-content" class="tab-content <?php echo $activeTab == 'openalex' ? 'active' : ''; ?>">
+                <div class="journal-name"><?php echo htmlspecialchars($openAlexData['name']); ?></div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-label">Cited by</span>
+                        <span class="stat-value"><?php echo number_format($openAlexData['total']); ?></span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">h-index</span>
+                        <span class="stat-value"><?php echo $openAlexData['h_index']; ?></span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">i10-index</span>
+                        <span class="stat-value"><?php echo $openAlexData['i10_index']; ?></span>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="oaChart"></canvas>
+                </div>
+            </div>
         <?php endif; ?>
+
         <?php if ($showGS): ?>
-        <button class="tab-btn <?php echo $activeTab == 'scholar' ? 'active' : ''; ?>" onclick="openTab(event, 'gs-content')">Google Scholar</button>
+            <div id="gs-content" class="tab-content <?php echo $activeTab == 'scholar' ? 'active' : ''; ?>">
+                <div class="journal-name"><?php echo htmlspecialchars($scholarData['name']); ?></div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-label">Cited by</span>
+                        <span class="stat-value"><?php echo number_format($scholarData['total']); ?></span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">h-index</span>
+                        <span class="stat-value"><?php echo $scholarData['h_index']; ?></span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">i10-index</span>
+                        <span class="stat-value"><?php echo $scholarData['i10_index']; ?></span>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="gsChart"></canvas>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!isset($_GET['wl']) || $_GET['wl'] != '1'): ?>
+            <div class="widget-footer">
+                <span class="f-dot"></span>
+                <span>Live Data via <a href="<?= rtrim(base_url(), '/') ?>" target="_blank">I-Widget</a> &bull; <?php echo date('Y'); ?></span>
+            </div>
         <?php endif; ?>
     </div>
 
-    <?php if ($showOA): ?>
-    <div id="oa-content" class="tab-content <?php echo $activeTab == 'openalex' ? 'active' : ''; ?>">
-        <div class="journal-name"><?php echo htmlspecialchars($openAlexData['name']); ?></div>
-        <div class="stats-grid">
-            <div class="stat-box">
-                <span class="stat-label">Cited by</span>
-                <span class="stat-value"><?php echo number_format($openAlexData['total']); ?></span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-label">h-index</span>
-                <span class="stat-value"><?php echo $openAlexData['h_index']; ?></span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-label">i10-index</span>
-                <span class="stat-value"><?php echo $openAlexData['i10_index']; ?></span>
-            </div>
-        </div>
-        <div class="chart-container">
-            <canvas id="oaChart"></canvas>
-        </div>
-    </div>
-    <?php endif; ?>
-
-    <?php if ($showGS): ?>
-    <div id="gs-content" class="tab-content <?php echo $activeTab == 'scholar' ? 'active' : ''; ?>">
-        <div class="journal-name"><?php echo htmlspecialchars($scholarData['name']); ?></div>
-        <div class="stats-grid">
-            <div class="stat-box">
-                <span class="stat-label">Cited by</span>
-                <span class="stat-value"><?php echo number_format($scholarData['total']); ?></span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-label">h-index</span>
-                <span class="stat-value"><?php echo $scholarData['h_index']; ?></span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-label">i10-index</span>
-                <span class="stat-value"><?php echo $scholarData['i10_index']; ?></span>
-            </div>
-        </div>
-        <div class="chart-container">
-            <canvas id="gsChart"></canvas>
-        </div>
-    </div>
-    <?php endif; ?>
-
-    <?php if (!isset($_GET['wl']) || $_GET['wl'] != '1'): ?>
-    <div class="widget-footer">
-        <span class="f-dot"></span>
-        <span>Live Data via <a href="<?= rtrim(base_url(), '/') ?>" target="_blank">I-Widget</a> &bull; <?php echo date('Y'); ?></span>
-    </div>
-    <?php endif; ?>
-</div>
-
-<script>
-function openTab(evt, tabId) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tab-content");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].classList.remove("active");
-    }
-    tablinks = document.getElementsByClassName("tab-btn");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].classList.remove("active");
-    }
-    document.getElementById(tabId).classList.add("active");
-    evt.currentTarget.classList.add("active");
-}
-
-// Chart Configurations
-const primaryColor = '<?php echo $warnaHex; ?>';
-
-<?php if ($showOA): ?>
-const ctxOA = document.getElementById('oaChart').getContext('2d');
-new Chart(ctxOA, {
-    type: 'bar',
-    data: {
-        labels: <?php echo json_encode(array_keys($openAlexData['history'])); ?>,
-        datasets: [{
-            label: 'Citations',
-            data: <?php echo json_encode(array_values($openAlexData['history'])); ?>,
-            backgroundColor: primaryColor,
-            borderRadius: 4,
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { display: false }
-        },
-        scales: {
-            y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
-            x: { grid: { display: false } }
+    <script>
+        function openTab(evt, tabId) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
         }
-    }
-});
-<?php endif; ?>
 
-<?php if ($showGS): ?>
-const ctxGS = document.getElementById('gsChart').getContext('2d');
-new Chart(ctxGS, {
-    type: 'bar',
-    data: {
-        labels: <?php echo json_encode(array_keys($scholarData['history'])); ?>,
-        datasets: [{
-            label: 'Citations',
-            data: <?php echo json_encode(array_values($scholarData['history'])); ?>,
-            backgroundColor: primaryColor,
-            borderRadius: 4,
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { display: false }
-        },
-        scales: {
-            y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
-            x: { grid: { display: false } }
-        }
-    }
-});
-<?php endif; ?>
-</script>
+        // Chart Configurations
+        const primaryColor = '<?php echo $warnaHex; ?>';
+
+        <?php if ($showOA): ?>
+            const ctxOA = document.getElementById('oaChart').getContext('2d');
+            new Chart(ctxOA, {
+                type: 'bar',
+                data: {
+                    labels: <?php echo json_encode(array_keys($openAlexData['history'])); ?>,
+                    datasets: [{
+                        label: 'Citations',
+                        data: <?php echo json_encode(array_values($openAlexData['history'])); ?>,
+                        backgroundColor: primaryColor,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#f1f5f9'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        <?php endif; ?>
+
+        <?php if ($showGS): ?>
+            const ctxGS = document.getElementById('gsChart').getContext('2d');
+            new Chart(ctxGS, {
+                type: 'bar',
+                data: {
+                    labels: <?php echo json_encode(array_keys($scholarData['history'])); ?>,
+                    datasets: [{
+                        label: 'Citations',
+                        data: <?php echo json_encode(array_values($scholarData['history'])); ?>,
+                        backgroundColor: primaryColor,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#f1f5f9'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        <?php endif; ?>
+    </script>
 </body>
+
 </html>
